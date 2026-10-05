@@ -26,7 +26,7 @@ class Settings:
     log_level: str
     api_host: str = "0.0.0.0"
     api_port: int = 8000
-    bot_status_state: str = "nvirya.com ..."
+    bot_status_state: str = "nvirya.com · Chess"
 
 
 def _resolve_path(raw: str) -> Path:
