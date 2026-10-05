@@ -198,6 +198,7 @@ pytest -v
 | `/chess draw [game_id]` | Offers a draw or accepts an opponent's pending draw offer. |
 | `/chess board [game_id]` | Re-posts the game's current board in the active channel. |
 | `/chess games` | Lists all your waiting and active games. |
+| `/chess help` / `/help` | Shows chess bot commands and interactive gameplay guide. |
 | `/chessadmin abandon <game_id>` | Server admins (`Manage Server`) can abandon stuck games. |
 | `!sync` | Bot owner only: triggers immediate global command tree sync. |
 

@@ -99,6 +99,57 @@ class ChessCog(commands.Cog):
             lines.append(f"`{game.game_id}` — {color.value if color else '?'} — {state}")
         await interaction.response.send_message("\n".join(lines), ephemeral=True)
 
+    @chess.command(name="help", description="Show chess bot commands and gameplay guide")
+    async def chess_help(self, interaction: discord.Interaction) -> None:
+        await interaction.response.send_message(embed=build_help_embed(), ephemeral=True)
+
+    @app_commands.command(name="help", description="Show chess bot commands and gameplay guide")
+    async def global_help(self, interaction: discord.Interaction) -> None:
+        await interaction.response.send_message(embed=build_help_embed(), ephemeral=True)
+
+
+def build_help_embed() -> discord.Embed:
+    embed = discord.Embed(
+        title="♟️ Discord Chess — Hướng dẫn cách chơi",
+        description=(
+            "Chào mừng bạn đến với **Nvir Chess**! Bot cờ vua pixel-art tương tác 1v1 trên Discord.\n"
+            "Dưới đây là danh sách lệnh và hướng dẫn cách chơi."
+        ),
+        color=discord.Color.blurple(),
+    )
+    embed.add_field(
+        name="📜 Danh sách lệnh (/chess)",
+        value=(
+            "• `/chess create [theme]` — Tạo bàn cờ mới (bạn cầm Trắng). Theme từ 1 đến 5.\n"
+            "• `/chess join <game_id>` — Tham gia bàn cờ đang chờ (cầm Đen).\n"
+            "• `/chess board [game_id]` — Hiển thị lại bàn cờ hiện tại vào kênh chat.\n"
+            "• `/chess games` — Xem danh sách các ván cờ bạn đang tham gia.\n"
+            "• `/chess draw [game_id]` — Đề nghị hòa hoặc chấp nhận hòa.\n"
+            "• `/chess resign [game_id]` — Đầu hàng ván cờ.\n"
+            "• `/chess help` — Hiển thị hướng dẫn này."
+        ),
+        inline=False,
+    )
+    embed.add_field(
+        name="🎮 Cách di chuyển quân cờ",
+        value=(
+            "**1. Tham gia:** Người chơi thứ hai bấm nút **⚔️ Join Game** trên tin nhắn bàn cờ.\n"
+            "**2. Chọn quân:** Khi đến lượt, bấm nút **♟️ Move** ➔ menu chọn quân cờ khả dĩ.\n"
+            "**3. Chọn ô đến:** Bot hiển thị ảnh xem trước các ô hợp lệ ➔ chọn ô muốn đến.\n"
+            "**4. Phong cấp:** Khi tốt đến hàng cuối, chọn 1 trong 4 quân: Hậu, Xe, Tượng, Mã.\n"
+            "**5. Nhập thành:** Chọn Vua đi 2 ô về hướng Xe tương ứng.\n"
+            "**6. Bắt tốt qua đường (En Passant):** Tự động phát hiện khi đối thủ vừa nhảy tốt 2 ô."
+        ),
+        inline=False,
+    )
+    embed.add_field(
+        name="🎨 Giao diện & Chủ đề (Themes)",
+        value="Có 5 theme bàn cờ pixel-art: chọn khi tạo ván cờ bằng `/chess create theme:1..5` (mặc định là theme 1).",
+        inline=False,
+    )
+    embed.set_footer(text="Nvir Chess • Pixel Art Edition • nvirya.com")
+    return embed
+
 
 async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(ChessCog(bot))
