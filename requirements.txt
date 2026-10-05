@@ -1,0 +1,7 @@
+# Runtime dependencies for Discord Chess Bot & API
+discord.py>=2.4.0,<3.0.0
+aiosqlite>=0.19.0
+Pillow>=10.0.0
+python-dotenv>=1.0.0
+fastapi>=0.110.0
+uvicorn>=0.27.0
