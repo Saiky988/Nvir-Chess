@@ -1,4 +1,3 @@
-"""Bot client: wires database, assets, renderer and service together on startup."""
 from __future__ import annotations
 
 import logging
@@ -17,7 +16,6 @@ from .views.chess_board import GameButton
 
 log = logging.getLogger(__name__)
 
-# Monkey-patch DiscordWebSocket to identify as Discord Android (Mobile Status)
 _orig_send_as_json = DiscordWebSocket.send_as_json
 
 
@@ -38,7 +36,7 @@ EXTENSIONS = ("apps.bot.cogs.chess", "apps.bot.cogs.admin")
 
 class ChessBot(commands.Bot):
     def __init__(self, settings: Settings) -> None:
-        intents = discord.Intents.default()  # no privileged intents required
+        intents = discord.Intents.default()
         activity = discord.Activity(
             type=discord.ActivityType.custom,
             name="Custom Status",
@@ -60,7 +58,6 @@ class ChessBot(commands.Bot):
         self.chess_service = ChessService(self.database, renderer, self.settings.board_theme)
         await self.chess_service.start()
 
-        # Persistent buttons on existing board messages keep working after a restart.
         self.add_dynamic_items(GameButton)
 
         for extension in EXTENSIONS:
