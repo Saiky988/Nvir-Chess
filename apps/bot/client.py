@@ -5,6 +5,7 @@ import logging
 
 import discord
 from discord.ext import commands
+from discord.gateway import DiscordWebSocket
 
 from config.settings import Settings
 
@@ -16,13 +17,38 @@ from .views.chess_board import GameButton
 
 log = logging.getLogger(__name__)
 
+# Monkey-patch DiscordWebSocket to identify as Discord Android (Mobile Status)
+_orig_send_as_json = DiscordWebSocket.send_as_json
+
+
+async def patched_send_as_json(self, data):
+    if isinstance(data, dict) and data.get("op") == 2:
+        properties = data.get("d", {}).get("properties", {})
+        properties["$os"] = "Android"
+        properties["$browser"] = "Discord Android"
+        properties["$device"] = "Discord Android"
+        log.info("Bot identification modified to Discord Android (Mobile Status)")
+    return await _orig_send_as_json(self, data)
+
+
+DiscordWebSocket.send_as_json = patched_send_as_json
+
 EXTENSIONS = ("apps.bot.cogs.chess", "apps.bot.cogs.admin")
 
 
 class ChessBot(commands.Bot):
     def __init__(self, settings: Settings) -> None:
         intents = discord.Intents.default()  # no privileged intents required
-        super().__init__(command_prefix=commands.when_mentioned_or(settings.bot_prefix), intents=intents)
+        activity = discord.Activity(
+            type=discord.ActivityType.custom,
+            name="Custom Status",
+            state=settings.bot_status_state,
+        )
+        super().__init__(
+            command_prefix=commands.when_mentioned_or(settings.bot_prefix),
+            intents=intents,
+            activity=activity,
+        )
         self.settings = settings
         self.database = Database(settings.database_path)
         self.chess_service: ChessService

@@ -26,6 +26,7 @@ class Settings:
     log_level: str
     api_host: str = "0.0.0.0"
     api_port: int = 8000
+    bot_status_state: str = "nvirya.com ..."
 
 
 def _resolve_path(raw: str) -> Path:
@@ -57,6 +58,7 @@ def load_settings() -> Settings:
         raise ConfigurationError(f"PORT must be between 1 and 65535, got {api_port}")
 
     api_host = os.getenv("HOST", os.getenv("API_HOST", "0.0.0.0")).strip() or "0.0.0.0"
+    bot_status_state = os.getenv("BOT_STATUS_STATE", "nvirya.com ...").strip() or "nvirya.com ..."
 
     return Settings(
         discord_token=os.getenv("DISCORD_TOKEN", "").strip(),
@@ -66,4 +68,5 @@ def load_settings() -> Settings:
         log_level=log_level,
         api_host=api_host,
         api_port=api_port,
+        bot_status_state=bot_status_state,
     )

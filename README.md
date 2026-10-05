@@ -100,12 +100,7 @@ discord-chess/
 
 3. **Install dependencies**:
    ```bash
-   # Standard installation (Shared hosting / Pterodactyl / VPS):
-   pip install -r requirements.txt
-
-   # Or for development and testing:
-   pip install -r requirements-dev.txt
-   # (or: pip install -e ".[dev]")
+   pip install -e ".[dev]"
    ```
 
 ---
@@ -135,13 +130,6 @@ BOARD_THEME=1
 
 # Log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
 LOG_LEVEL=INFO
-
-# Hosting & Web Server (Wispbyte / Pterodactyl / Shared hosting / VPS)
-HOST=0.0.0.0
-PORT=8000
-
-# Set to true if your host requires an active web port while running the bot
-ENABLE_API=false
 ```
 
 ---
@@ -163,23 +151,15 @@ All board and piece assets are located in `assets/`:
 
 ## Running the Project
 
-### 1. Run Discord Bot (Shared Hosting / Wispbyte / Local)
+### 1. Run Discord Bot
 
 ```bash
-# Standard command (recommended for Pterodactyl / Wispbyte / cPanel):
-python main.py
-
-# Or via module path:
 python -m apps.bot.main
 ```
 
-### 2. Run API Server (Health check & Web service)
+### 2. Run API Server
 
 ```bash
-# Direct runner:
-python -m apps.api.main
-
-# Or using uvicorn:
 uvicorn apps.api.main:app --host 0.0.0.0 --port 8000
 ```
 
@@ -189,16 +169,7 @@ curl http://localhost:8000/api/v1/health
 # Response: {"status":"ok"}
 ```
 
-### 3. Combined Mode (Bot + Web Health Server together)
-
-If your hosting provider (e.g. Render, Koyeb, Wispbyte Web egg) expects an active web port while running the Discord bot:
-
-```bash
-python main.py --with-api
-# or set ENABLE_API=true in .env and run: python main.py
-```
-
-### 4. Run Tests
+### 3. Run Tests
 
 ```bash
 pytest -v
